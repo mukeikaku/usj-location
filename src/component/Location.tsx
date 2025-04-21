@@ -15,10 +15,28 @@ export default function Location() {
   const [os, setOs] = useState(""); // OSのステートを追加
   const [remarks, setRemarks] = useState(""); // 備考のステートを追加
 
+  const targetPlaces = [
+    "プレイング・ウィズおさるのジョージ",
+    "ユニバーサル・モンスター・ライブ・ロックンロール・ショー",
+    "ルイズ・N.Y.ピザパーラー",
+    "メルズ・ドライブ・イン",
+    "ザ・ドラゴンズ・パール",
+    "ディスカバリー・レストラン",
+    "ロストワールド・レストラン",
+    "ウォーターワールド",
+    "アミティ・ランディング・レストラン",
+    "キノピオ・カフェ",
+    "三本の箒",
+  ];
+
   // 初期レンダリング時にUAを利用してOSを設定
   useEffect(() => {
     const userAgent = navigator.userAgent.toLowerCase();
-    if (userAgent.includes("iphone") || userAgent.includes("ipad") || userAgent.includes("ipod")) {
+    if (
+      userAgent.includes("iphone") ||
+      userAgent.includes("ipad") ||
+      userAgent.includes("ipod")
+    ) {
       setOs("iOS");
     } else if (userAgent.includes("android")) {
       setOs("Android");
@@ -136,8 +154,11 @@ export default function Location() {
             <option value="" disabled>
               選択してください
             </option>
-            <option value="target1">ターゲット1</option>
-            <option value="target2">ターゲット2</option>
+            {targetPlaces.map((place) => (
+              <option key={place} value={place}>
+                {place}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex items-center gap-x-4">
