@@ -13,6 +13,7 @@ export default function Location() {
   const [point, setPoint] = useState("");
   const [attempts, setAttempts] = useState("");
   const [os, setOs] = useState(""); // OSのステートを追加
+  const [remarks, setRemarks] = useState(""); // 備考のステートを追加
 
   // 初期レンダリング時にUAを利用してOSを設定
   useEffect(() => {
@@ -54,8 +55,9 @@ export default function Location() {
       point,
       attempts,
       gpsStrength,
-      distanceError, // 距離誤差を送信データに追加
-      os, // OSを送信データに追加
+      distanceError,
+      os,
+      remarks, // 備考を送信データに追加
     };
 
     try {
@@ -76,8 +78,9 @@ export default function Location() {
         setPoint("");
         setAttempts("");
         setGpsStrength("");
-        setDistanceError(""); // 距離誤差をリセット
-        setOs(""); // OSをリセット
+        setDistanceError("");
+        setOs("");
+        setRemarks(""); // 備考をリセット
       } else {
         alert("データの追加に失敗しました。");
       }
@@ -153,6 +156,7 @@ export default function Location() {
             </option>
             <option value="area1">エリア1</option>
             <option value="area2">エリア2</option>
+            <option value="area3">エリア3</option>
           </select>
         </div>
         <div className="flex items-center gap-x-4">
@@ -169,10 +173,11 @@ export default function Location() {
             <option value="" disabled>
               選択してください
             </option>
-            <option value="point1">北東</option>
-            <option value="point2">北西</option>
-            <option value="point3">南東</option>
-            <option value="point4">南西</option>
+            <option value="northeast">北東</option>
+            <option value="northwest">北西</option>
+            <option value="southeast">南東</option>
+            <option value="southwest">南西</option>
+            <option value="center">中央</option>
           </select>
         </div>
         <div className="flex items-center gap-x-4">
@@ -239,6 +244,19 @@ export default function Location() {
             <option value="iOS">iOS</option>
             <option value="Android">Android</option>
           </select>
+        </div>
+        <div className="flex items-center gap-x-4">
+          <label htmlFor="remarks" className="w-32 font-medium">
+            備考:
+          </label>
+          <textarea
+            id="remarks"
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
+            placeholder="備考を入力してください"
+            className="flex-1 p-2 border border-gray-300 rounded"
+            rows={4}
+          />
         </div>
         <div className="flex gap-x-4">
           <button
