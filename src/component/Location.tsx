@@ -14,6 +14,18 @@ export default function Location() {
   const [attempts, setAttempts] = useState("");
   const [os, setOs] = useState(""); // OSのステートを追加
 
+  // 初期レンダリング時にUAを利用してOSを設定
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (userAgent.includes("iphone") || userAgent.includes("ipad") || userAgent.includes("ipod")) {
+      setOs("iOS");
+    } else if (userAgent.includes("android")) {
+      setOs("Android");
+    } else {
+      setOs(""); // OSが判別できない場合は空にする
+    }
+  }, []);
+
   useEffect(() => {
     console.log(
       latitude,
