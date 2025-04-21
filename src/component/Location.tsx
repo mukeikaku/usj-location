@@ -7,10 +7,12 @@ export default function Location() {
   const [longitude, setLongitude] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [avgSnr, setAvgSnr] = useState("");
+  const [gpsStrength, setGpsStrength] = useState(""); // GPS強度のステートを追加
   const [target, setTarget] = useState("");
   const [area, setArea] = useState("");
   const [point, setPoint] = useState("");
   const [attempts, setAttempts] = useState("");
+  const [os, setOs] = useState(""); // OSのステートを追加
 
   useEffect(() => {
     console.log(
@@ -18,12 +20,14 @@ export default function Location() {
       longitude,
       error,
       avgSnr,
+      gpsStrength,
       target,
       area,
       point,
-      attempts
+      attempts,
+      os
     );
-  }, [latitude, longitude, error, avgSnr, target, area, point, attempts]);
+  }, [latitude, longitude, error, avgSnr, gpsStrength, target, area, point, attempts, os]);
 
   const targetPlaces = [
     "プレイング・ウィズおさるのジョージ",
@@ -67,6 +71,8 @@ export default function Location() {
       point,
       attempts,
       avgSnr,
+      gpsStrength,
+      os, // OSを送信データに追加
     };
 
     try {
@@ -80,8 +86,17 @@ export default function Location() {
 
       if (response.ok) {
         alert("データがGoogle Spreadsheetに追加されました！");
+        setLatitude("");
+        setLongitude("");
+        setTarget("");
+        setArea("");
+        setPoint("");
+        setAttempts("");
+        setAvgSnr("");
+        setGpsStrength("");
+        setOs(""); // OSをリセット
       } else {
-        alert("aデータの追加に失敗しました。");
+        alert("データの追加に失敗しました。");
       }
     } catch (error) {
       console.error(error);
@@ -215,6 +230,38 @@ export default function Location() {
             className="flex-1 p-2 border border-gray-300 rounded"
             required={true}
           />
+        </div>
+        <div className="flex items-center gap-x-4">
+          <label htmlFor="gpsStrength" className="w-32 font-medium">
+            GPS強度:
+          </label>
+          <input
+            type="number"
+            id="gpsStrength"
+            value={gpsStrength}
+            onChange={(e) => setGpsStrength(e.target.value)}
+            placeholder="GPS強度を入力してください"
+            className="flex-1 p-2 border border-gray-300 rounded"
+            required={true}
+          />
+        </div>
+        <div className="flex items-center gap-x-4">
+          <label htmlFor="os" className="w-32 font-medium">
+            OS:
+          </label>
+          <select
+            id="os"
+            value={os}
+            onChange={(e) => setOs(e.target.value)}
+            className="flex-1 p-2 border border-gray-300 rounded"
+            required={true}
+          >
+            <option value="" disabled>
+              選択してください
+            </option>
+            <option value="iOS">iOS</option>
+            <option value="Android">Android</option>
+          </select>
         </div>
         <div className="flex gap-x-4">
           <button
