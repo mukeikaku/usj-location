@@ -1,0 +1,29 @@
+version: 1
+applications:
+  - appRoot: src # プロジェクトのルートディレクトリ
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm install # 必要な依存関係をインストール
+        build:
+          commands:
+            - npm run build # Next.js のビルドコマンド
+      artifacts:
+        baseDirectory: .next # ビルド成果物のディレクトリ
+        files:
+          - '**/*' # すべてのファイルを含める
+      cache:
+        paths:
+          - node_modules/**/* # キャッシュするディレクトリ
+    backend:
+      phases:
+        build:
+          commands:
+            - echo "バックエンドのビルドステップが必要な場合はここに追加"
+    customHeaders:
+      # カスタムヘッダーの設定（必要に応じて追加）
+      - pattern: '**/*'
+        headers:
+          - key: Cache-Control
+            value: max-age=0,no-cache,no-store,must-revalidate
