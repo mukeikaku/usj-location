@@ -3,10 +3,20 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   const body = await req.json();
-  const { latitude, longitude, target, area, point, attempts, avgSnr } = body;
+  const {
+    latitude,
+    longitude,
+    target,
+    area,
+    point,
+    attempts,
+    gpsStrength,
+    distanceError,
+    os,
+    remarks, // 備考を受け取る
+  } = body;
 
   try {
-    // サービスアカウントキーをハードコード
     const auth = new google.auth.GoogleAuth({
       credentials: {
         type: "service_account",
@@ -38,7 +48,20 @@ export async function POST(req) {
       range,
       valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: [[latitude, longitude, target, area, point, attempts, avgSnr]],
+        values: [
+          [
+            latitude,
+            longitude,
+            target,
+            area,
+            point,
+            attempts,
+            gpsStrength,
+            distanceError,
+            os,
+            remarks, // 備考をスプレッドシートに追加
+          ],
+        ],
       },
     });
 
@@ -46,7 +69,7 @@ export async function POST(req) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "bデータの追加に失敗しました。" },
+      { error: "データの追加に失敗しました。" },
       { status: 500 }
     );
   }
