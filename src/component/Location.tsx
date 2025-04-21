@@ -6,8 +6,8 @@ export default function Location() {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [avgSnr, setAvgSnr] = useState("");
   const [gpsStrength, setGpsStrength] = useState(""); // GPS強度のステートを追加
+  const [distanceError, setDistanceError] = useState(""); // 距離誤差のステートを追加
   const [target, setTarget] = useState("");
   const [area, setArea] = useState("");
   const [point, setPoint] = useState("");
@@ -25,35 +25,6 @@ export default function Location() {
       setOs(""); // OSが判別できない場合は空にする
     }
   }, []);
-
-  useEffect(() => {
-    console.log(
-      latitude,
-      longitude,
-      error,
-      avgSnr,
-      gpsStrength,
-      target,
-      area,
-      point,
-      attempts,
-      os
-    );
-  }, [latitude, longitude, error, avgSnr, gpsStrength, target, area, point, attempts, os]);
-
-  const targetPlaces = [
-    "プレイング・ウィズおさるのジョージ",
-    "ユニバーサル・モンスター・ライブ・ロックンロール・ショー",
-    "ルイズ・N.Y.ピザパーラー",
-    "メルズ・ドライブ・イン",
-    "ザ・ドラゴンズ・パール",
-    "ディスカバリー・レストラン",
-    "ロストワールド・レストラン",
-    "ウォーターワールド",
-    "アミティ・ランディング・レストラン",
-    "キノピオ・カフェ",
-    "三本の箒",
-  ];
 
   const handleGetLocation = () => {
     if (navigator.geolocation) {
@@ -82,8 +53,8 @@ export default function Location() {
       area,
       point,
       attempts,
-      avgSnr,
       gpsStrength,
+      distanceError, // 距離誤差を送信データに追加
       os, // OSを送信データに追加
     };
 
@@ -104,8 +75,8 @@ export default function Location() {
         setArea("");
         setPoint("");
         setAttempts("");
-        setAvgSnr("");
         setGpsStrength("");
+        setDistanceError(""); // 距離誤差をリセット
         setOs(""); // OSをリセット
       } else {
         alert("データの追加に失敗しました。");
@@ -162,13 +133,8 @@ export default function Location() {
             <option value="" disabled>
               選択してください
             </option>
-            {targetPlaces.map((el) => {
-              return (
-                <option value={el} key={el}>
-                  {el}
-                </option>
-              );
-            })}
+            <option value="target1">ターゲット1</option>
+            <option value="target2">ターゲット2</option>
           </select>
         </div>
         <div className="flex items-center gap-x-4">
@@ -187,7 +153,6 @@ export default function Location() {
             </option>
             <option value="area1">エリア1</option>
             <option value="area2">エリア2</option>
-            <option value="area3">エリア3</option>
           </select>
         </div>
         <div className="flex items-center gap-x-4">
@@ -230,20 +195,6 @@ export default function Location() {
           </select>
         </div>
         <div className="flex items-center gap-x-4">
-          <label htmlFor="avgSnr" className="w-32 font-medium">
-            AVG SNR:
-          </label>
-          <input
-            type="number"
-            id="avgSnr"
-            value={avgSnr}
-            onChange={(e) => setAvgSnr(e.target.value)}
-            placeholder="数値を入力してください"
-            className="flex-1 p-2 border border-gray-300 rounded"
-            required={true}
-          />
-        </div>
-        <div className="flex items-center gap-x-4">
           <label htmlFor="gpsStrength" className="w-32 font-medium">
             GPS強度:
           </label>
@@ -253,6 +204,20 @@ export default function Location() {
             value={gpsStrength}
             onChange={(e) => setGpsStrength(e.target.value)}
             placeholder="GPS強度を入力してください"
+            className="flex-1 p-2 border border-gray-300 rounded"
+            required={true}
+          />
+        </div>
+        <div className="flex items-center gap-x-4">
+          <label htmlFor="distanceError" className="w-32 font-medium">
+            距離誤差:
+          </label>
+          <input
+            type="number"
+            id="distanceError"
+            value={distanceError}
+            onChange={(e) => setDistanceError(e.target.value)}
+            placeholder="距離誤差を入力してください"
             className="flex-1 p-2 border border-gray-300 rounded"
             required={true}
           />
