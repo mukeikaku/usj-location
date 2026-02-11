@@ -259,7 +259,14 @@ export default function Location() {
                   features: [
                     {
                       type: "Feature",
-                      properties: { name: target },
+                      properties: {
+                        name: target,
+                        stroke: "#ff0000",
+                        "stroke-width": 3,
+                        "stroke-opacity": 1,
+                        fill: "#ff0000",
+                        "fill-opacity": 0.3,
+                      },
                       geometry: {
                         type: "Polygon",
                         coordinates: [
