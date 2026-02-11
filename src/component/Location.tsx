@@ -235,6 +235,19 @@ export default function Location() {
         </div>
       </form>
       {error && <p className="text-red-500 mt-4">エラー: {error}</p>}
+      {result && (
+        <div className="mt-6 p-4 rounded border">
+          <h2 className="font-medium mb-2">結果:</h2>
+          {result.type === "success" ? (
+            <p className="text-green-600 font-bold text-lg">成功</p>
+          ) : (
+            <p className="text-red-600">
+              境界線から <span className="font-bold">{result.distance}m</span>{" "}
+              <span className="font-bold">{result.direction}</span> に外れています
+            </p>
+          )}
+        </div>
+      )}
       {target && selectedCoordinates.length > 0 && (
         <div className="mt-6">
           <div className="flex items-center gap-x-4 mb-2">
@@ -291,19 +304,6 @@ export default function Location() {
               </li>
             ))}
           </ul>
-        </div>
-      )}
-      {result && (
-        <div className="mt-6 p-4 rounded border">
-          <h2 className="font-medium mb-2">結果:</h2>
-          {result.type === "success" ? (
-            <p className="text-green-600 font-bold text-lg">成功</p>
-          ) : (
-            <p className="text-red-600">
-              境界線から <span className="font-bold">{result.distance}m</span>{" "}
-              <span className="font-bold">{result.direction}</span> に外れています
-            </p>
-          )}
         </div>
       )}
     </div>
