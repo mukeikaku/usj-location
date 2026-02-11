@@ -260,6 +260,7 @@ export default function Location() {
         <div className="mt-6">
           <h2 className="font-medium mb-2">座標:</h2>
           <AreaMap
+            key={target}
             polygon={selectedCoordinates.map((c) => ({ lat: c.lat, lng: c.lng }))}
             marker={
               latitude && longitude
