@@ -233,11 +233,50 @@ export default function Location() {
             required={true}
           />
         </div>
+        {latitude && longitude && (
+          <div className="flex items-center gap-x-4">
+            <span className="w-32" />
+            <a
+              href={`https://www.google.com/maps?q=${latitude},${longitude}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline text-sm"
+            >
+              Google Maps で確認
+            </a>
+          </div>
+        )}
       </form>
       {error && <p className="text-red-500 mt-4">エラー: {error}</p>}
-      {target && (
+      {target && selectedCoordinates.length > 0 && (
         <div className="mt-6">
-          <h2 className="font-medium mb-2">座標:</h2>
+          <div className="flex items-center gap-x-4 mb-2">
+            <h2 className="font-medium">座標:</h2>
+            <a
+              href={`https://geojson.io/#data=data:application/json,${encodeURIComponent(
+                JSON.stringify({
+                  type: "FeatureCollection",
+                  features: [
+                    {
+                      type: "Feature",
+                      properties: { name: target },
+                      geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                          selectedCoordinates.map((c) => [c.lng, c.lat]),
+                        ],
+                      },
+                    },
+                  ],
+                })
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline text-sm"
+            >
+              地図で領域を確認
+            </a>
+          </div>
           <ul className="list-disc list-inside space-y-1 text-sm">
             {selectedCoordinates.map((coord, i) => (
               <li key={i}>
