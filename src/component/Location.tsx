@@ -130,7 +130,8 @@ export default function Location() {
       },
       (err) => {
         setError(err.message);
-      }
+      },
+      { enableHighAccuracy: true, maximumAge: 0 }
     );
   };
 
