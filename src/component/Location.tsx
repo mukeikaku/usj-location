@@ -1,7 +1,10 @@
 "use client";
 // This component uses the Geolocation API to get the user's current location
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import mapData from "@/data/map_data.json";
+
+const AreaMap = dynamic(() => import("@/component/AreaMap"), { ssr: false });
 
 type Point = { lat: number; lng: number };
 
@@ -250,61 +253,16 @@ export default function Location() {
       )}
       {target && selectedCoordinates.length > 0 && (
         <div className="mt-6">
-          <div className="flex items-center gap-x-4 mb-2">
-            <h2 className="font-medium">座標:</h2>
-            <a
-              href={`https://geojson.io/#data=data:application/json,${encodeURIComponent(
-                JSON.stringify({
-                  type: "FeatureCollection",
-                  features: [
-                    {
-                      type: "Feature",
-                      properties: {
-                        name: target,
-                        stroke: "#ff0000",
-                        "stroke-width": 3,
-                        "stroke-opacity": 1,
-                        fill: "#ff0000",
-                        "fill-opacity": 0.3,
-                      },
-                      geometry: {
-                        type: "Polygon",
-                        coordinates: [
-                          selectedCoordinates.map((c) => [c.lng, c.lat]),
-                        ],
-                      },
-                    },
-                    ...(latitude && longitude
-                      ? [
-                          {
-                            type: "Feature",
-                            properties: {
-                              name: "現在地",
-                              "marker-color": "#e74c3c",
-                              "marker-size": "large",
-                              "marker-symbol": "circle",
-                            },
-                            geometry: {
-                              type: "Point",
-                              coordinates: [
-                                parseFloat(longitude),
-                                parseFloat(latitude),
-                              ],
-                            },
-                          },
-                        ]
-                      : []),
-                  ],
-                })
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 underline text-sm"
-            >
-              地図で領域を確認
-            </a>
-          </div>
-          <ul className="list-disc list-inside space-y-1 text-sm">
+          <h2 className="font-medium mb-2">座標:</h2>
+          <AreaMap
+            polygon={selectedCoordinates.map((c) => ({ lat: c.lat, lng: c.lng }))}
+            marker={
+              latitude && longitude
+                ? { lat: parseFloat(latitude), lng: parseFloat(longitude) }
+                : undefined
+            }
+          />
+          <ul className="list-disc list-inside space-y-1 text-sm mt-2">
             {selectedCoordinates.map((coord, i) => (
               <li key={i}>
                 lat: {coord.lat}, lng: {coord.lng}
