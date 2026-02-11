@@ -233,19 +233,6 @@ export default function Location() {
             required={true}
           />
         </div>
-        {latitude && longitude && (
-          <div className="flex items-center gap-x-4">
-            <span className="w-32" />
-            <a
-              href={`https://www.google.com/maps?q=${latitude},${longitude}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 underline text-sm"
-            >
-              Google Maps で確認
-            </a>
-          </div>
-        )}
       </form>
       {error && <p className="text-red-500 mt-4">エラー: {error}</p>}
       {target && selectedCoordinates.length > 0 && (
@@ -267,6 +254,26 @@ export default function Location() {
                         ],
                       },
                     },
+                    ...(latitude && longitude
+                      ? [
+                          {
+                            type: "Feature",
+                            properties: {
+                              name: "現在地",
+                              "marker-color": "#e74c3c",
+                              "marker-size": "large",
+                              "marker-symbol": "circle",
+                            },
+                            geometry: {
+                              type: "Point",
+                              coordinates: [
+                                parseFloat(longitude),
+                                parseFloat(latitude),
+                              ],
+                            },
+                          },
+                        ]
+                      : []),
                   ],
                 })
               )}`}
