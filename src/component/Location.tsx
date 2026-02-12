@@ -258,7 +258,60 @@ export default function Location() {
       )}
       {target && selectedCoordinates.length > 0 && (
         <div className="mt-6">
-          <h2 className="font-medium mb-2">座標:</h2>
+          <div className="flex items-center gap-x-4 mb-2">
+            <h2 className="font-medium">座標:</h2>
+            <a
+              href={`https://geojson.io/#data=data:application/json,${encodeURIComponent(
+                JSON.stringify({
+                  type: "FeatureCollection",
+                  features: [
+                    {
+                      type: "Feature",
+                      properties: {
+                        name: target,
+                        stroke: "#ff0000",
+                        "stroke-width": 3,
+                        "stroke-opacity": 1,
+                        fill: "#ff0000",
+                        "fill-opacity": 0.3,
+                      },
+                      geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                          selectedCoordinates.map((c) => [c.lng, c.lat]),
+                        ],
+                      },
+                    },
+                    ...(latitude && longitude
+                      ? [
+                          {
+                            type: "Feature",
+                            properties: {
+                              name: "現在地",
+                              "marker-color": "#e74c3c",
+                              "marker-size": "large",
+                              "marker-symbol": "circle",
+                            },
+                            geometry: {
+                              type: "Point",
+                              coordinates: [
+                                parseFloat(longitude),
+                                parseFloat(latitude),
+                              ],
+                            },
+                          },
+                        ]
+                      : []),
+                  ],
+                })
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline text-sm"
+            >
+              geojson.io で確認
+            </a>
+          </div>
           <AreaMap
             key={target}
             polygon={selectedCoordinates.map((c) => ({ lat: c.lat, lng: c.lng }))}
